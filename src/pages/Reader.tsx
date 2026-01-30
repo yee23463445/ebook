@@ -140,7 +140,17 @@ export default function Reader() {
     const currentPage = book.pages[pageIndex];
 
     return (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#fff' }}>
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 1000,
+            display: 'flex',
+            flexDirection: 'column',
+            backgroundColor: '#fff'
+        }}>
             {/* Header */}
             <div style={{ padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #eee' }}>
                 <Link to="/" style={{ color: '#333', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
@@ -164,7 +174,14 @@ export default function Reader() {
             </div>
 
             {/* Main Content */}
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', position: 'relative' }}>
+            <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '1rem'
+            }}>
 
                 {/* Left Nav Area */}
                 <div
@@ -190,7 +207,7 @@ export default function Reader() {
                     </button>
                 )}
 
-                <div style={{ maxWidth: '800px', width: '100%', textAlign: 'center' }}>
+                <div style={{ maxWidth: '800px', width: '100%', textAlign: 'center', margin: 'auto' }}>
                     {currentPage ? (
                         <div style={{ animation: 'fadeIn 0.5s' }}>
                             {currentPage.image && (
