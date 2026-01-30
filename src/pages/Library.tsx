@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Book } from '../types';
-import { getAllBooks } from '../lib/db';
+import { getAllBooks, initializeDefaultBooks } from '../lib/db';
 import { Settings } from 'lucide-react';
 
 export default function Library() {
     const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        getAllBooks().then(setBooks);
+        // Initialize default books if DB is empty, then load all books
+        initializeDefaultBooks().then(() => {
+            getAllBooks().then(setBooks);
+        });
     }, []);
 
     return (
         <div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '2rem' }}>
-                <Link to="/admin" style={{ color: '#ccc', padding: '10px' }} title="Result Management">
+                <Link to="/admin" style={{ color: '#ccc', padding: '10px' }} title="Manage Books">
                     <Settings size={20} />
                 </Link>
             </div>
@@ -56,8 +59,7 @@ export default function Library() {
                 ))}
                 {books.length === 0 && (
                     <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#888', marginTop: '3rem' }}>
-                        <p>No books available.</p>
-                        <Link to="/admin" style={{ color: '#646cff' }}>Add your first book</Link>
+                        <p>Loading default books...</p>
                     </div>
                 )}
             </div>

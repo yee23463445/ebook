@@ -1,5 +1,6 @@
 import { openDB, type DBSchema } from 'idb';
 import type { Book } from '../types';
+import { defaultBooks } from '../data/defaultBooks';
 
 interface EbookDB extends DBSchema {
     books: {
@@ -40,4 +41,27 @@ export async function saveBook(book: Book): Promise<string> {
 export async function deleteBook(id: string): Promise<void> {
     const db = await initDB();
     await db.delete(STORE_NAME, id);
+}
+
+export async function initializeDefaultBooks(): Promise<void> {
+    const db = await initDB();
+    const count = await db.count(STORE_NAME);
+
+    if (count === 0) {
+        const baseUrl = import.meta.env.BASE_URL;
+
+        // Process paths to correct URL
+        const booksToAdd = defaultBooks.map(book => ({
+            ...book,
+            coverImage: book.coverImage ? `${baseUrl}${book.coverImage}` : '',
+            pages: book.pages.map(p => ({
+                ...p,
+                image: p.image ? `${baseUrl}${p.image}` : undefined
+            }))
+        }));
+
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        await Promise.all(booksToAdd.map(book => tx.store.put(book)));
+        await tx.done;
+    }
 }
