@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -34,6 +40,12 @@ textarea,
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+  }
 }
 
 button {
